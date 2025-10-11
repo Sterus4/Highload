@@ -2,6 +2,7 @@ databaseChangeLog:
   - changeSet:
       id: 1
       author: sterus1
+      ignore: true
       changes:
         - createTable:
             tableName: test_table

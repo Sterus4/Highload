@@ -1,0 +1,35 @@
+openapi: 3.1.0
+info:
+  title: Highload api
+  description: Highload api
+  version: 1.0.0
+
+servers:
+  - url: 'http://localhost:8080'
+
+paths:
+  /echo/{message}:
+    get:
+      summary: Echo message
+      operationId: echo
+      parameters:
+        - name: message
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        400:
+          $ref: './common/responses.yaml#/400'
+        500:
+          $ref: './common/responses.yaml#/500'
+

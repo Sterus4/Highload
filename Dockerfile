@@ -3,13 +3,15 @@ FROM gradle:8-jdk17 AS builder
 
 WORKDIR /app
 
-COPY build.gradle settings.gradle ./
+COPY build.gradle settings.gradle .openapi-generator-java-sources.ignore ./
 COPY gradle ./gradle
 
 RUN --mount=type=cache,id=gradle-cache,target=/home/gradle/.gradle \
     gradle dependencies --no-daemon
 
 COPY src ./src
+
+RUN gradle openApiGenerate --no-daemon
 
 RUN --mount=type=cache,id=gradle-cache,target=/home/gradle/.gradle \
     gradle build -x test --no-daemon

@@ -1,0 +1,23 @@
+400:
+  description: Запрос содержит неправильные данные.
+  content:
+    application/json:
+      schema:
+        $ref: "#/ApiErrorResponse"
+
+500:
+  description: Внутренняя ошибка сервера.
+  content:
+    application/json:
+      schema:
+        $ref: "#/ApiErrorResponse"
+
+ApiErrorResponse:
+  type: object
+  description: Общий формат ошибки.
+  required:
+    - message
+  properties:
+    message:
+      description: Описание ошибки.
+      type: string
