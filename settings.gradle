@@ -1,0 +1,11 @@
+rootProject.name = 'highload'
+
+// settings.gradle.kts
+buildCache {
+    local {
+        enabled = true
+    }
+}
+
+// Включаем Configuration Cache
+enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
