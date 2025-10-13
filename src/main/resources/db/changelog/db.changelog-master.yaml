@@ -1,15 +1,5 @@
 databaseChangeLog:
-  - changeSet:
-      id: 1
-      author: sterus1
-      ignore: true
-      changes:
-        - createTable:
-            tableName: test_table
-            columns:
-              - column:
-                  name: id
-                  type: bigint
-                  autoIncrement: true
-                  constraints:
-                    primaryKey: true
+  - includeAll:
+      path: db/changelog/migrations
+      relativeToChangelogFile: false
+      errorIfMissingOrEmpty: true

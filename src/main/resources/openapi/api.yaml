@@ -8,16 +8,15 @@ servers:
   - url: 'http://localhost:8080'
 
 paths:
-  /echo/{message}:
-    get:
-      summary: Echo message
-      operationId: echo
-      parameters:
-        - name: message
-          in: path
-          required: true
-          schema:
-            type: string
+  /api/user/register:
+    post:
+      summary: RegisterUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: 'schemas/users.yaml#/components/schemas/UserDTO'
       responses:
         200:
           description: OK
@@ -28,8 +27,3 @@ paths:
                 properties:
                   message:
                     type: string
-        400:
-          $ref: './common/responses.yaml#/400'
-        500:
-          $ref: './common/responses.yaml#/500'
-

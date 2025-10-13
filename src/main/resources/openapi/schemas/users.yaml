@@ -1,0 +1,11 @@
+components:
+  schemas:
+    UserDTO:
+      x-class-name: UserDTO
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          minLength: 4

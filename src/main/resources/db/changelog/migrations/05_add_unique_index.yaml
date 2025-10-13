@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: 5
+      author: sterus1
+      changes:
+        - createIndex:
+            tableName: users
+            indexName: users_name_unique
+            unique: true
+            columns:
+              - column:
+                  name: name

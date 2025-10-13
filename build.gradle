@@ -33,14 +33,16 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-jooq'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
-	implementation 'org.jetbrains.kotlin:kotlin-reflect'
+    implementation 'jakarta.validation:jakarta.validation-api:3.1.1'
+    implementation 'org.springframework.boot:spring-boot-starter-validation:4.0.0-M3'
+    implementation 'org.jetbrains.kotlin:kotlin-reflect'
 	implementation 'org.liquibase:liquibase-core'
+    implementation 'javax.validation:validation-api:2.0.1.Final'
     compileOnly "org.openapitools:jackson-databind-nullable:0.2.6"
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
 
-//	runtimeOnly 'org.postgresql:postgresql'
     implementation "org.postgresql:postgresql"
 
     annotationProcessor 'org.projectlombok:lombok'
@@ -66,17 +68,33 @@ allOpen {
 
 openApiGenerate {
     generatorName.set('java')
-    configOptions.set([
-            library: 'restclient'
+
+    configOptions.putAll([
+            "library": 'restclient',
+            "interfaceOnly": 'false',
+            "useBeanValidation": 'true',
+            "useSpringBoot3": 'true',
+            "java8": 'true',
+            "hateoas": "false",
+            "useTags": "true",
+            "useSchemaName": 'true',
+            "singleContentTypes": "true",
     ])
+    outputDir.set("$buildDir/generated-openapi/")
     inputSpec.set('src/main/resources/openapi/api.yaml')
     ignoreFileOverride.set(".openapi-generator-java-sources.ignore")
-    invokerPackage.set('ru.sterus1.vs')
-    modelPackage.set('ru.sterus1.vs.model')
-    apiPackage.set('ru.sterus1.vs.api')
+    invokerPackage.set('ru.sterus.vs.highload.openapi')
+    modelPackage.set('ru.sterus.vs.highload.openapi.model')
+    modelNameSuffix.set("Dto")
+    modelNamePrefix.set("")
+    apiPackage.set('ru.sterus.vs.highload.openapi.api')
 }
 
-sourceSets.main.java.srcDir "${rootProject.layout.buildDirectory}/generate-resources/main/src/main/java"
+sourceSets {
+    main {
+        java.srcDirs += "$buildDir/generated-openapi/src/main/java"
+    }
+}
 
 tasks.named('test') {
 	useJUnitPlatform()

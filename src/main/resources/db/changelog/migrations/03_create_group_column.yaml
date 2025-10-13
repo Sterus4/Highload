@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: 3
+      author: sterus1
+      changes:
+        - addColumn:
+            tableName: ticket
+            columns:
+              - column:
+                  name: group_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    foreignKeyName: ticket_group_id_fk
+                    references: user_groups(id)
