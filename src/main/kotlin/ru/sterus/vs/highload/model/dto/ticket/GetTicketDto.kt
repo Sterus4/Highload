@@ -31,6 +31,6 @@ data class StatusFilter(
 data class GetTicketDto(
     @field:NotNull
     var page: Page,
-    var groupFilter: GroupFilter?,
-    var statusFilter: StatusFilter?
+    var groupFilter: GroupFilter? = null,
+    var statusFilter: StatusFilter? = null
 )

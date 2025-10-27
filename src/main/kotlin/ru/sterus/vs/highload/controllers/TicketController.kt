@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController
 import ru.sterus.vs.highload.model.dto.ticket.CreateTicketDto
 import ru.sterus.vs.highload.model.dto.DefaultResponseDto
 import ru.sterus.vs.highload.model.dto.ticket.GetTicketDto
+import ru.sterus.vs.highload.model.dto.ticket.UpdateTicketDto
 import ru.sterus.vs.highload.service.TicketService
 import ru.sterus.vs.highload.util.ServiceUtil
 import java.util.UUID
@@ -32,4 +33,16 @@ class TicketController(private val ticketService: TicketService, private val ser
     fun getTicket(
         @Valid @RequestBody getTicketDto: GetTicketDto
     ) = ticketService.getTicket(getTicketDto)
+
+    @PostMapping("/api/ticket/update")
+    fun updateTicket(
+        @Valid @RequestBody updateTicketDto: UpdateTicketDto,
+        @RequestHeader("CurrentUser") currentUser: String
+        ): ResponseEntity<DefaultResponseDto?> {
+        serviceUtil.validateUUID(currentUser)
+        val currentUserId = UUID.fromString(currentUser)
+
+        ticketService.updateTicket(updateTicketDto, currentUserId)
+        return ResponseEntity.ok(DefaultResponseDto(message = "Ticket updated successfully!"))
+    }
 }

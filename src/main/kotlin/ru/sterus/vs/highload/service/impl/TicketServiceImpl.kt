@@ -6,7 +6,9 @@ import ru.sterus.vs.highload.enums.Role
 import ru.sterus.vs.highload.exception.ProcessRequestException
 import ru.sterus.vs.highload.model.dto.ticket.CreateTicketDto
 import ru.sterus.vs.highload.model.dto.ticket.GetTicketDto
+import ru.sterus.vs.highload.model.dto.ticket.Page
 import ru.sterus.vs.highload.model.dto.ticket.Ticket
+import ru.sterus.vs.highload.model.dto.ticket.UpdateTicketDto
 import ru.sterus.vs.highload.repositories.GroupRepository
 import ru.sterus.vs.highload.repositories.TicketRepository
 import ru.sterus.vs.highload.service.TicketService
@@ -29,4 +31,17 @@ class TicketServiceImpl(val groupRepository: GroupRepository, val ticketReposito
 
     override fun getTicket(getTicketDto: GetTicketDto): List<Ticket>
         = ticketRepository.get(getTicketDto)
+
+    override fun updateTicket(updateTicketDto: UpdateTicketDto, currentUserId: UUID) {
+        val currentTicket = ticketRepository.getOneTicket(updateTicketDto.id)
+        val userGroups = groupRepository.getUserGroups(currentUserId)
+        val accesses = userGroups.filter {
+            it.groupName == currentTicket.group || it.groupName == "SUPER"
+        }
+        if (accesses.isEmpty()) {
+            throw ProcessRequestException(HttpStatus.FORBIDDEN, "You are not allowed to manage ticket <${updateTicketDto.id}>")
+        }
+
+        ticketRepository.updateTicket(updateTicketDto)
+    }
 }

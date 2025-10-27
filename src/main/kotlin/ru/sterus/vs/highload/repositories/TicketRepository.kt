@@ -1,12 +1,15 @@
 package ru.sterus.vs.highload.repositories
 
 import org.jooq.DSLContext
+import org.jooq.UpdateSetFirstStep
+import org.jooq.UpdateSetMoreStep
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Repository
 import ru.sterus.vs.highload.exception.ProcessRequestException
 import ru.sterus.vs.highload.helper.intFromStatus
 import ru.sterus.vs.highload.model.dto.ticket.GetTicketDto
 import ru.sterus.vs.highload.model.dto.ticket.Ticket
+import ru.sterus.vs.highload.model.dto.ticket.UpdateTicketDto
 import ru.sterus.vs.highload.repositories.Mapping.*
 import java.util.UUID
 
@@ -54,5 +57,42 @@ class TicketRepository(private val dsl: DSLContext, private val groupRepository:
             .limit(getTicketDto.page.size)
 
         return query.fetchInto(Ticket::class.java)
+    }
+
+    fun getOneTicket(id: UUID) : Ticket {
+        val query = dsl.select(
+            TICKET.TITLE.`as`("title"),
+            TICKET.DESCRIPTION.`as`("description"),
+            TICKET.CREATED_AT.`as`("ticket_created_at"),
+            USER_GROUPS.NAME.`as`("group"),
+            USERS.NAME.`as`("author"),
+            TICKET_STATUS.STATUS.`as`("status")
+        ).from(TICKET)
+            .join(USER_GROUPS)
+            .on(TICKET.GROUP_ID.eq(USER_GROUPS.ID))
+            .join(USERS)
+            .on(TICKET.AUTHOR_ID.eq(USERS.ID))
+            .join(TICKET_STATUS)
+            .on(TICKET.STATUS_ID.eq(TICKET_STATUS.ID))
+            .where(TICKET.ID.eq(id))
+
+        return query.fetchInto(Ticket::class.java).single()
+    }
+
+    fun updateTicket(updateTicketDto: UpdateTicketDto) {
+        var query : UpdateSetMoreStep<*>? = null
+        if(updateTicketDto.title != null){
+            query = dsl.update(TICKET)
+                .set(TICKET.TITLE, updateTicketDto.title)
+        }
+        if(updateTicketDto.description != null){
+            query = (query ?: dsl.update(TICKET))
+                .set(TICKET.DESCRIPTION, updateTicketDto.description)
+        }
+        if(updateTicketDto.status != null){
+            query = (query ?: dsl.update(TICKET))
+                .set(TICKET.STATUS_ID, updateTicketDto.status!!.intFromStatus())
+        }
+        query?.where(TICKET.ID.eq(updateTicketDto.id))?.execute()
     }
 }
