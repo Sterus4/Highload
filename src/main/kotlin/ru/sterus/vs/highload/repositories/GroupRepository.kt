@@ -48,6 +48,11 @@ class GroupRepository(private val dsl: DSLContext, private val util: DBUtil) {
             .where(field("name").eq(groupName))
             .fetchInto(UserGroup::class.java)
     }
+    fun getGroupsByName(groupNames: List<String>): List<UserGroup?> {
+        return dsl.selectFrom(table("user_groups"))
+            .where(field("name").`in`(groupNames))
+            .fetchInto(UserGroup::class.java)
+    }
 
     fun addUser(groupId: UUID, userToAddId: UUID, role: Role){
         val roleId = role.intFromRole() ?: throw ProcessRequestException(HttpStatus.BAD_REQUEST, "Role <$role> does not exists")

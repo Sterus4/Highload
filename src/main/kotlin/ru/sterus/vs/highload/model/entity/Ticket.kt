@@ -9,9 +9,8 @@ import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import jakarta.validation.constraints.NotNull
 import org.hibernate.annotations.ColumnDefault
-import ru.sterus.vs.highload.enums.TicketStatusEnum
-import ru.sterus.vs.highload.helper.intFromStatus
-import ru.sterus.vs.highload.model.dto.CreateTicketDto
+import ru.sterus.vs.highload.model.dto.ticket.CreateTicketDto
+import ru.sterus.vs.highload.model.dto.ticket.Ticket
 import java.time.OffsetDateTime
 import java.util.UUID
 

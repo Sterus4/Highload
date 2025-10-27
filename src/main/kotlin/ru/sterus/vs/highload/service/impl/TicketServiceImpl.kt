@@ -4,8 +4,9 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import ru.sterus.vs.highload.enums.Role
 import ru.sterus.vs.highload.exception.ProcessRequestException
-import ru.sterus.vs.highload.model.dto.CreateTicketDto
-import ru.sterus.vs.highload.model.entity.Ticket
+import ru.sterus.vs.highload.model.dto.ticket.CreateTicketDto
+import ru.sterus.vs.highload.model.dto.ticket.GetTicketDto
+import ru.sterus.vs.highload.model.dto.ticket.Ticket
 import ru.sterus.vs.highload.repositories.GroupRepository
 import ru.sterus.vs.highload.repositories.TicketRepository
 import ru.sterus.vs.highload.service.TicketService
@@ -22,9 +23,10 @@ class TicketServiceImpl(val groupRepository: GroupRepository, val ticketReposito
         }
 
         val groupId = groupRepository.getGroupByName(createTicketDto.groupName).singleOrNull()
-        if(groupId == null) {
-            throw ProcessRequestException(HttpStatus.BAD_REQUEST, "Group <${createTicketDto.groupName}> does not exist")
-        }
+            ?: throw ProcessRequestException(HttpStatus.BAD_REQUEST, "Group <${createTicketDto.groupName}> does not exist")
         ticketRepository.create(Ticket.fromDto(createTicketDto), currentUser, groupId.id!!)
     }
+
+    override fun getTicket(getTicketDto: GetTicketDto): List<Ticket>
+        = ticketRepository.get(getTicketDto)
 }

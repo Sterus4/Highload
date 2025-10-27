@@ -1,4 +1,4 @@
-package ru.sterus.vs.highload.model.dto
+package ru.sterus.vs.highload.model.dto.ticket
 
 import jakarta.annotation.Nullable
 import jakarta.validation.constraints.NotBlank

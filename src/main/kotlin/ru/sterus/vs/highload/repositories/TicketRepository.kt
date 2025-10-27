@@ -4,12 +4,14 @@ import org.jooq.DSLContext
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Repository
 import ru.sterus.vs.highload.exception.ProcessRequestException
-import ru.sterus.vs.highload.model.entity.Ticket
-import ru.sterus.vs.highload.repositories.Mapping.TICKET
+import ru.sterus.vs.highload.helper.intFromStatus
+import ru.sterus.vs.highload.model.dto.ticket.GetTicketDto
+import ru.sterus.vs.highload.model.dto.ticket.Ticket
+import ru.sterus.vs.highload.repositories.Mapping.*
 import java.util.UUID
 
 @Repository
-class TicketRepository(private val dsl: DSLContext) {
+class TicketRepository(private val dsl: DSLContext, private val groupRepository: GroupRepository) {
     fun create(ticket: Ticket, authorId: UUID, groupId: UUID) {
         val inserted = dsl.insertInto(Mapping.TICKET)
             .set(TICKET.ID, UUID.randomUUID())
@@ -24,5 +26,33 @@ class TicketRepository(private val dsl: DSLContext) {
         }
     }
 
+    fun get(getTicketDto: GetTicketDto): List<Ticket> {
+        val query = dsl.select(
+            TICKET.TITLE.`as`("title"),
+            TICKET.DESCRIPTION.`as`("description"),
+            TICKET.CREATED_AT.`as`("ticket_created_at"),
+            USER_GROUPS.NAME.`as`("group"),
+            USERS.NAME.`as`("author"),
+            TICKET_STATUS.STATUS.`as`("status")
+        ).from(TICKET)
+            .join(USER_GROUPS)
+            .on(TICKET.GROUP_ID.eq(USER_GROUPS.ID))
+            .join(USERS)
+            .on(TICKET.AUTHOR_ID.eq(USERS.ID))
+            .join(TICKET_STATUS)
+            .on(TICKET.STATUS_ID.eq(TICKET_STATUS.ID))
 
+        if (getTicketDto.groupFilter != null) {
+            query.where(USER_GROUPS.NAME.`in`(getTicketDto.groupFilter?.groups))
+        }
+        if (getTicketDto.statusFilter != null) {
+            query.where(TICKET.STATUS_ID.eq(getTicketDto.statusFilter!!.status.intFromStatus()))
+        }
+        query
+            .orderBy(TICKET.CREATED_AT.desc())
+            .offset(getTicketDto.page.start)
+            .limit(getTicketDto.page.size)
+
+        return query.fetchInto(Ticket::class.java)
+    }
 }
