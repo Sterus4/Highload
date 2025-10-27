@@ -1,0 +1,7 @@
+components:
+  schemas:
+    Default200Response:
+      type: object
+      properties:
+        message:
+          type: string

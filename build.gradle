@@ -29,7 +29,7 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+//	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
 	implementation 'org.springframework.boot:spring-boot-starter-jooq'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
@@ -39,9 +39,9 @@ dependencies {
 	implementation 'org.liquibase:liquibase-core'
     implementation 'javax.validation:validation-api:2.0.1.Final'
     compileOnly "org.openapitools:jackson-databind-nullable:0.2.6"
-	compileOnly 'org.projectlombok:lombok'
+//	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
+//	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
 
     implementation "org.postgresql:postgresql"
 
@@ -80,6 +80,7 @@ openApiGenerate {
             "useSchemaName": 'true',
             "singleContentTypes": "true",
     ])
+//    TODO deprecated
     outputDir.set("$buildDir/generated-openapi/")
     inputSpec.set('src/main/resources/openapi/api.yaml')
     ignoreFileOverride.set(".openapi-generator-java-sources.ignore")

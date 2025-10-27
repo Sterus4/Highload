@@ -1,8 +1,8 @@
-package ru.sterus.vs.highload.repositories
+package ru.sterus.vs.highload.util
 
-import org.springframework.stereotype.Component
 import jakarta.validation.Validator
 import org.springframework.http.HttpStatus
+import org.springframework.stereotype.Component
 import ru.sterus.vs.highload.exception.ProcessRequestException
 
 @Component

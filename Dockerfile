@@ -9,11 +9,6 @@ COPY gradle ./gradle
 RUN --mount=type=cache,id=gradle-cache,target=/home/gradle/.gradle \
     gradle dependencies --no-daemon
 
-
-COPY src/main/resources/openapi ./src/main/resources/openapi
-
-RUN gradle openApiGenerate --no-daemon
-
 COPY src ./src
 
 RUN --mount=type=cache,id=gradle-cache,target=/home/gradle/.gradle \

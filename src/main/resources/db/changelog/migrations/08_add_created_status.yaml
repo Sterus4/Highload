@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 9
+      author: sterus1
+      changes:
+        - insert:
+            tableName: ticket_status
+            columns:
+              - column:
+                  name: status
+                  value: Created

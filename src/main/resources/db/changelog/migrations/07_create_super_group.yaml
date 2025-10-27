@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: 7
+      author: sterus1
+      changes:
+        - addColumn:
+            tableName: user_groups
+            columns:
+              - column:
+                  name: name
+                  type: text
+                  constraints:
+                    unique: true
+        - insert:
+            tableName: user_groups
+            columns:
+              - column:
+                  name: name
+                  value: SUPER
+              - column:
+                  name: id
+                  value: '5fa1f4f9-1dee-497d-a6cd-15db80506434'

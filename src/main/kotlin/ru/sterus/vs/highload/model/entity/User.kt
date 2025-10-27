@@ -6,6 +6,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
+import ru.sterus.vs.highload.model.dto.UserDto
 import java.util.UUID
 
 @Entity

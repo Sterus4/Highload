@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Repository
 import ru.sterus.vs.highload.exception.ProcessRequestException
 import ru.sterus.vs.highload.model.entity.User
+import ru.sterus.vs.highload.util.DBUtil
 import java.util.UUID
 
 @Repository
@@ -21,5 +22,11 @@ class UserRepository(private val dsl: DSLContext, private val util: DBUtil) {
         if (record != 1){
            throw ProcessRequestException(HttpStatus.BAD_REQUEST, "User <${user.name}> already exists")
         }
+    }
+
+    fun getUserByName(name: String): List<User> {
+        return dsl.selectFrom(table("users"))
+            .where(field("name").eq(name))
+            .fetchInto(User::class.java)
     }
 }

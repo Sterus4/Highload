@@ -5,17 +5,17 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
-import ru.sterus.vs.highload.model.entity.UserDto
-import ru.sterus.vs.highload.openapi.model.ApiUserRegisterPost200ResponseDto
+import ru.sterus.vs.highload.model.dto.DefaultResponseDto
+import ru.sterus.vs.highload.model.dto.UserDto
 import ru.sterus.vs.highload.service.UserService
 
 @RestController
-class UserController(private val userService: UserService, service: UserService){
+class UserController(private val userService: UserService){
 
     @PostMapping("/api/user/register")
-    fun register(@Valid @RequestBody request: UserDto): ResponseEntity<ApiUserRegisterPost200ResponseDto>{
+    fun register(@Valid @RequestBody request: UserDto): ResponseEntity<DefaultResponseDto>{
         userService.registerUser(request)
-        return ResponseEntity.ok(ApiUserRegisterPost200ResponseDto().message(
+        return ResponseEntity.ok(DefaultResponseDto(message =
             "User ${request.name} registered successfully"
         ))
     }

@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: 5
+      author: sterus1
+      changes:
+        - insert:
+            tableName: ticket_status
+            columns:
+              - column:
+                  name: status
+                  value: Open
+        - insert:
+            tableName: ticket_status
+            columns:
+              - column:
+                  name: status
+                  value: Progress
+        - insert:
+            tableName: ticket_status
+            columns:
+              - column:
+                  name: status
+                  value: Close
+  - changeSet:
+      id: 6
+      author: sterus1
+      changes:
+        - insert:
+            tableName: user_group_role
+            columns:
+              - column:
+                  name: role
+                  value: Admin
+        - insert:
+            tableName: user_group_role
+            columns:
+              - column:
+                  name: role
+                  value: Participant

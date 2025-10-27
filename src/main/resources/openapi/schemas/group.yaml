@@ -1,6 +1,6 @@
 components:
   schemas:
-    UserDTO:
+    GroupDTO:
       type: object
       required:
         - name
