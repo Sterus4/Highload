@@ -1,4 +1,4 @@
-package ru.sterus.vs.highload.model.dto
+package ru.sterus.vs.highload.enums
 
 enum class Role {
     ADMIN,

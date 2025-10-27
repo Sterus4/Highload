@@ -9,6 +9,9 @@ import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import jakarta.validation.constraints.NotNull
 import org.hibernate.annotations.ColumnDefault
+import ru.sterus.vs.highload.enums.TicketStatusEnum
+import ru.sterus.vs.highload.helper.intFromStatus
+import ru.sterus.vs.highload.model.dto.CreateTicketDto
 import java.time.OffsetDateTime
 import java.util.UUID
 
@@ -45,4 +48,11 @@ open class Ticket {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "group_id", nullable = false)
     open var group: UserGroup? = null
+
+    companion object {
+        fun fromDto(createTicketDto: CreateTicketDto) = Ticket().apply {
+            title = createTicketDto.title
+            description = createTicketDto.description
+        }
+    }
 }

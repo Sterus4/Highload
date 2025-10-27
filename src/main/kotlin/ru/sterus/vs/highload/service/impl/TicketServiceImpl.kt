@@ -1,13 +1,30 @@
 package ru.sterus.vs.highload.service.impl
 
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
+import ru.sterus.vs.highload.enums.Role
+import ru.sterus.vs.highload.exception.ProcessRequestException
 import ru.sterus.vs.highload.model.dto.CreateTicketDto
+import ru.sterus.vs.highload.model.entity.Ticket
+import ru.sterus.vs.highload.repositories.GroupRepository
+import ru.sterus.vs.highload.repositories.TicketRepository
 import ru.sterus.vs.highload.service.TicketService
 import java.util.UUID
 
 @Service
-class TicketServiceImpl : TicketService {
+class TicketServiceImpl(val groupRepository: GroupRepository, val ticketRepository: TicketRepository) : TicketService {
     override fun createTicket(createTicketDto: CreateTicketDto, currentUser: UUID) {
-        TODO("Not yet implemented")
+        val userGroups = groupRepository.getUserGroups(currentUser).filter {
+            it.groupName == createTicketDto.groupName && it.role == Role.ADMIN.toString() || it.groupName == "SUPER"
+        }
+        if (userGroups.isEmpty()) {
+            throw ProcessRequestException(HttpStatus.FORBIDDEN, "You are not allowed to manage group <${createTicketDto.groupName}>")
+        }
+
+        val groupId = groupRepository.getGroupByName(createTicketDto.groupName).singleOrNull()
+        if(groupId == null) {
+            throw ProcessRequestException(HttpStatus.BAD_REQUEST, "Group <${createTicketDto.groupName}> does not exist")
+        }
+        ticketRepository.create(Ticket.fromDto(createTicketDto), currentUser, groupId.id!!)
     }
 }

@@ -1,7 +1,7 @@
 package ru.sterus.vs.highload.service
 
 import ru.sterus.vs.highload.model.dto.GroupDto
-import ru.sterus.vs.highload.model.dto.Role
+import ru.sterus.vs.highload.enums.Role
 import java.util.UUID
 
 interface GroupService {

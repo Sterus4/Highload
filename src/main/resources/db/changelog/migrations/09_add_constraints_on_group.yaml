@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: 10
+      author: sterus1
+      changes:
+        - createIndex:
+            tableName: user_groups
+            indexName: user_groups_name_unique
+            unique: true
+            columns:
+              - column:
+                  name: name
+        - addNotNullConstraint:
+            tableName: user_groups
+            columnName: name

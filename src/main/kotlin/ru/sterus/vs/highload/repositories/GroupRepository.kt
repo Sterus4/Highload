@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Repository
 import ru.sterus.vs.highload.exception.ProcessRequestException
 import ru.sterus.vs.highload.helper.intFromRole
-import ru.sterus.vs.highload.model.dto.Role
+import ru.sterus.vs.highload.enums.Role
 import ru.sterus.vs.highload.model.dto.UserRoleGroup
 import ru.sterus.vs.highload.model.entity.UserGroup
 import ru.sterus.vs.highload.util.DBUtil
