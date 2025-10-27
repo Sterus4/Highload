@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Repository
 import ru.sterus.vs.highload.exception.ProcessRequestException
 import ru.sterus.vs.highload.helper.intFromStatus
+import ru.sterus.vs.highload.model.dto.ticket.DeleteTicketDto
 import ru.sterus.vs.highload.model.dto.ticket.GetTicketDto
 import ru.sterus.vs.highload.model.dto.ticket.Ticket
 import ru.sterus.vs.highload.model.dto.ticket.UpdateTicketDto
@@ -59,7 +60,7 @@ class TicketRepository(private val dsl: DSLContext, private val groupRepository:
         return query.fetchInto(Ticket::class.java)
     }
 
-    fun getOneTicket(id: UUID) : Ticket {
+    fun getOneTicket(id: UUID) : Ticket? {
         val query = dsl.select(
             TICKET.TITLE.`as`("title"),
             TICKET.DESCRIPTION.`as`("description"),
@@ -76,7 +77,7 @@ class TicketRepository(private val dsl: DSLContext, private val groupRepository:
             .on(TICKET.STATUS_ID.eq(TICKET_STATUS.ID))
             .where(TICKET.ID.eq(id))
 
-        return query.fetchInto(Ticket::class.java).single()
+        return query.fetchInto(Ticket::class.java).singleOrNull()
     }
 
     fun updateTicket(updateTicketDto: UpdateTicketDto) {
@@ -94,5 +95,14 @@ class TicketRepository(private val dsl: DSLContext, private val groupRepository:
                 .set(TICKET.STATUS_ID, updateTicketDto.status!!.intFromStatus())
         }
         query?.where(TICKET.ID.eq(updateTicketDto.id))?.execute()
+    }
+
+    fun deleteTicket(deleteTicketDto: DeleteTicketDto) {
+        val deleted = dsl.delete(TICKET)
+            .where(TICKET.ID.eq(deleteTicketDto.id))
+            .execute()
+        if (deleted != 1) {
+            throw ProcessRequestException(HttpStatus.INTERNAL_SERVER_ERROR, "Ticket <${deleteTicketDto.id}> is not exist")
+        }
     }
 }

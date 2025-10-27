@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service
 import ru.sterus.vs.highload.enums.Role
 import ru.sterus.vs.highload.exception.ProcessRequestException
 import ru.sterus.vs.highload.model.dto.ticket.CreateTicketDto
+import ru.sterus.vs.highload.model.dto.ticket.DeleteTicketDto
 import ru.sterus.vs.highload.model.dto.ticket.GetTicketDto
 import ru.sterus.vs.highload.model.dto.ticket.Page
 import ru.sterus.vs.highload.model.dto.ticket.Ticket
@@ -33,7 +34,10 @@ class TicketServiceImpl(val groupRepository: GroupRepository, val ticketReposito
         = ticketRepository.get(getTicketDto)
 
     override fun updateTicket(updateTicketDto: UpdateTicketDto, currentUserId: UUID) {
-        val currentTicket = ticketRepository.getOneTicket(updateTicketDto.id)
+        val currentTicket = ticketRepository.getOneTicket(updateTicketDto.id) ?: throw ProcessRequestException(
+            HttpStatus.BAD_REQUEST,
+            "Ticket <${updateTicketDto.id}> does not exist"
+        )
         val userGroups = groupRepository.getUserGroups(currentUserId)
         val accesses = userGroups.filter {
             it.groupName == currentTicket.group || it.groupName == "SUPER"
@@ -43,5 +47,22 @@ class TicketServiceImpl(val groupRepository: GroupRepository, val ticketReposito
         }
 
         ticketRepository.updateTicket(updateTicketDto)
+    }
+
+    override fun deleteTicket(deleteTicketDto: DeleteTicketDto, currentUserId: UUID) {
+        val userGroups = groupRepository.getUserGroups(currentUserId)
+        val currentTicket = ticketRepository.getOneTicket(deleteTicketDto.id) ?: throw ProcessRequestException(
+            HttpStatus.BAD_REQUEST,
+            "Ticket <${deleteTicketDto.id}> does not exist"
+        )
+        val accesses = userGroups.filter {
+            it.groupName == currentTicket.group || it.groupName == "SUPER"
+        }
+
+        if (accesses.isEmpty()) {
+            throw ProcessRequestException(HttpStatus.FORBIDDEN, "You are not allowed to manage ticket <${deleteTicketDto.id}>")
+        }
+
+        ticketRepository.deleteTicket(deleteTicketDto)
     }
 }
