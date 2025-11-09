@@ -2,12 +2,10 @@ package ru.sterus.vs.highload.service.impl
 
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
-import ru.sterus.vs.highload.enums.Role
 import ru.sterus.vs.highload.exception.ProcessRequestException
 import ru.sterus.vs.highload.model.dto.ticket.CreateTicketDto
 import ru.sterus.vs.highload.model.dto.ticket.DeleteTicketDto
 import ru.sterus.vs.highload.model.dto.ticket.GetTicketDto
-import ru.sterus.vs.highload.model.dto.ticket.Page
 import ru.sterus.vs.highload.model.dto.ticket.Ticket
 import ru.sterus.vs.highload.model.dto.ticket.UpdateTicketDto
 import ru.sterus.vs.highload.repositories.GroupRepository
