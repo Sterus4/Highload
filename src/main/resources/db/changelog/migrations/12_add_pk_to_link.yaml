@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 13
+      author: sterus1
+      changes:
+        - addPrimaryKey:
+            tableName: link
+            columnNames: first_ticket_id, second_ticket_id
+            constraintName: link_pk

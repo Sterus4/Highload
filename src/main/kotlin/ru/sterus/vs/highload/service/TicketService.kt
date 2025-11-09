@@ -9,7 +9,6 @@ import java.util.UUID
 
 interface TicketService {
     fun createTicket(createTicketDto: CreateTicketDto, currentUser: UUID)
-
     fun getTicket(getTicketDto: GetTicketDto): List<Ticket>
     fun updateTicket(updateTicketDto: UpdateTicketDto, currentUserId: UUID)
     fun deleteTicket(deleteTicketDto: DeleteTicketDto, currentUserId: UUID)
