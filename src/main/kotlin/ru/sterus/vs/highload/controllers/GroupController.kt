@@ -18,7 +18,7 @@ import java.util.UUID
 class GroupController(private val groupService: GroupService, private val serviceUtil: ServiceUtil) {
         @PostMapping("/api/group/create")
     fun createGroup(
-        @RequestHeader("CurrentUser") currentUser: String,
+        @RequestHeader("Current-User") currentUser: String,
         @Valid @RequestBody group: GroupDto
     ) : ResponseEntity<DefaultResponseDto>{
         serviceUtil.validateUUID(currentUser)
@@ -32,7 +32,7 @@ class GroupController(private val groupService: GroupService, private val servic
 
     @PostMapping("/api/group/user/add")
     fun addUserGroup(
-        @RequestHeader("CurrentUser") currentUser: String,
+        @RequestHeader("Current-User") currentUser: String,
         @Valid @RequestBody request: GroupAddUserDto
     ) : ResponseEntity<DefaultResponseDto>{
         serviceUtil.validateUUID(currentUser)
@@ -44,7 +44,7 @@ class GroupController(private val groupService: GroupService, private val servic
 
     @PostMapping("/api/group/user/move")
     fun moveUserGroup(
-        @RequestHeader("CurrentUser") currentUser: String,
+        @RequestHeader("Current-User") currentUser: String,
         @Valid @RequestBody request: MoveUserToGroupDto
     ) : ResponseEntity<DefaultResponseDto> {
         serviceUtil.validateUUID(currentUser)

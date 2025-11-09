@@ -24,7 +24,7 @@ class TicketController(private val ticketService: TicketService, private val ser
     @PostMapping("/create")
     fun createTicket(
         @Valid @RequestBody createTicketDto: CreateTicketDto,
-        @RequestHeader("CurrentUser") currentUser: String
+        @RequestHeader("Current-User") currentUser: String
     ) : ResponseEntity<DefaultResponseDto>{
         serviceUtil.validateUUID(currentUser)
         val currentUserId = UUID.fromString(currentUser)
@@ -41,7 +41,7 @@ class TicketController(private val ticketService: TicketService, private val ser
     @PostMapping("/update")
     fun updateTicket(
         @Valid @RequestBody updateTicketDto: UpdateTicketDto,
-        @RequestHeader("CurrentUser") currentUser: String
+        @RequestHeader("Current-User") currentUser: String
         ): ResponseEntity<DefaultResponseDto?> {
         serviceUtil.validateUUID(currentUser)
         val currentUserId = UUID.fromString(currentUser)
@@ -53,7 +53,7 @@ class TicketController(private val ticketService: TicketService, private val ser
     @DeleteMapping("/delete")
     fun deleteTicket(
         @Valid @RequestBody deleteTicketDto: DeleteTicketDto,
-        @RequestHeader("CurrentUser") currentUser: String
+        @RequestHeader("Current-User") currentUser: String
     ) : ResponseEntity<DefaultResponseDto?> {
         serviceUtil.validateUUID(currentUser)
         val currentUserId = UUID.fromString(currentUser)

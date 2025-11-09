@@ -2,7 +2,6 @@ package ru.sterus.vs.highload.helper
 
 import ru.sterus.vs.highload.enums.Role
 import ru.sterus.vs.highload.enums.TicketStatusEnum
-import ru.sterus.vs.highload.model.entity.TicketStatus
 
 private val roleMap = mapOf(
     Role.ADMIN to 1,

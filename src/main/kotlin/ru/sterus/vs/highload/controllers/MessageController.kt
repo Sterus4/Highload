@@ -23,7 +23,7 @@ class MessageController(private val messageService: MessageService) {
     fun createMessage(
         @PathParam("ticketId") ticketId: UUID,
         @Valid @RequestBody createMessageDto: CreateMessageDto,
-        @RequestHeader("CurrentUser") currentUser: String
+        @RequestHeader("Current-User") currentUser: String
     ) : ResponseEntity<DefaultResponseDto> {
         messageService.createMessage(ticketId, createMessageDto, currentUser)
         return ResponseEntity.status(201).body(DefaultResponseDto(message = "Message created successfully!"))
@@ -40,7 +40,7 @@ class MessageController(private val messageService: MessageService) {
     fun updateMessage(
         @PathParam("messageId") messageId: Long,
         @Valid @RequestBody updateMessageDto: CreateMessageDto,
-        @RequestHeader("CurrentUser") currentUser: String
+        @RequestHeader("Current-User") currentUser: String
     ) : ResponseEntity<DefaultResponseDto> {
         messageService.updateMessage(messageId, updateMessageDto, currentUser)
         //TODO 204 кажется
@@ -50,7 +50,7 @@ class MessageController(private val messageService: MessageService) {
     @DeleteMapping("/delete/{messageId}")
     fun deleteMessage(
         @PathParam("messageId") messageId: Long,
-        @RequestHeader("CurrentUser") currentUser: String
+        @RequestHeader("Current-User") currentUser: String
     ) : ResponseEntity<DefaultResponseDto> {
         messageService.deleteMessage(messageId, currentUser)
         return ResponseEntity.status(200).body(DefaultResponseDto(message = "Message deleted successfully!"))
