@@ -15,7 +15,7 @@ import ru.sterus.vs.highload.repositories.Mapping.*
 import java.util.UUID
 
 @Repository
-class TicketRepository(private val dsl: DSLContext, private val groupRepository: GroupRepository) {
+class TicketRepository(private val dsl: DSLContext) {
     fun create(ticket: Ticket, authorId: UUID, groupId: UUID) {
         val inserted = dsl.insertInto(Mapping.TICKET)
             .set(field("id"), UUID.randomUUID())

@@ -11,5 +11,5 @@ data class UpdateTicketDto(
     @field:Size(min = 3, max = 255)
     var title: String?,
     var description: String?,
-    var status: TicketStatusEnum?
+    var status: TicketStatusEnum? = null
 )

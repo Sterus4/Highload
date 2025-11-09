@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service
 import ru.sterus.vs.highload.exception.ProcessRequestException
 import ru.sterus.vs.highload.model.dto.MessageDto
 import ru.sterus.vs.highload.model.dto.message.CreateMessageDto
+import ru.sterus.vs.highload.model.dto.message.UpdateMessageDto
 import ru.sterus.vs.highload.model.entity.Message
 import ru.sterus.vs.highload.repositories.jpa.MessageJPARepository
 import ru.sterus.vs.highload.repositories.TicketRepository
@@ -56,7 +57,7 @@ class MessageServiceImpl(
         }
     }
 
-    override fun updateMessage(messageId: Long, updateMessageDto: CreateMessageDto, currentUser: String) {
+    override fun updateMessage(messageId: Long, updateMessageDto: UpdateMessageDto, currentUser: String) {
         userJPARepository.findUserByName(currentUser) ?: throw ProcessRequestException(HttpStatus.BAD_REQUEST,"User not found")
         val message = messageJPARepository.findMessageById(messageId) ?: throw ProcessRequestException(HttpStatus.BAD_REQUEST,"Message not found")
         if(message.createdBy!!.name != currentUser) throw ProcessRequestException(HttpStatus.FORBIDDEN,"You can't update this message")

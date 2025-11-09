@@ -1,0 +1,2 @@
+insert into users values ('73cf6c42-69d8-4b4b-9379-beb93c916a36', 'sterus') on conflict do nothing;
+insert into participant values ('73cf6c42-69d8-4b4b-9379-beb93c916a36', '5fa1f4f9-1dee-497d-a6cd-15db80506434', 1) on conflict do nothing;

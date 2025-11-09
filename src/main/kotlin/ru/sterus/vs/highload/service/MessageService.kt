@@ -2,11 +2,12 @@ package ru.sterus.vs.highload.service
 
 import ru.sterus.vs.highload.model.dto.MessageDto
 import ru.sterus.vs.highload.model.dto.message.CreateMessageDto
+import ru.sterus.vs.highload.model.dto.message.UpdateMessageDto
 import java.util.UUID
 
 interface MessageService {
     fun createMessage(ticketId: UUID, createMessageDto: CreateMessageDto, currentUserId: String)
     fun getMessage(ticketId: String): List<MessageDto>
-    fun updateMessage(messageId: Long, updateMessageDto: CreateMessageDto, currentUser: String)
+    fun updateMessage(messageId: Long, updateMessageDto: UpdateMessageDto, currentUser: String)
     fun deleteMessage(messageId: Long, currentUser: String)
 }

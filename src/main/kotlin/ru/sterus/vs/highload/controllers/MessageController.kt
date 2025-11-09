@@ -1,10 +1,10 @@
 package ru.sterus.vs.highload.controllers
 
 import jakarta.validation.Valid
-import jakarta.websocket.server.PathParam
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController
 import ru.sterus.vs.highload.model.dto.DefaultResponseDto
 import ru.sterus.vs.highload.model.dto.MessageDto
 import ru.sterus.vs.highload.model.dto.message.CreateMessageDto
+import ru.sterus.vs.highload.model.dto.message.UpdateMessageDto
 import ru.sterus.vs.highload.service.MessageService
 import java.util.UUID
 
@@ -21,7 +22,7 @@ import java.util.UUID
 class MessageController(private val messageService: MessageService) {
     @PostMapping("/send/{ticketId}")
     fun createMessage(
-        @PathParam("ticketId") ticketId: UUID,
+        @PathVariable("ticketId") ticketId: UUID,
         @Valid @RequestBody createMessageDto: CreateMessageDto,
         @RequestHeader("Current-User") currentUser: String
     ) : ResponseEntity<DefaultResponseDto> {
@@ -31,15 +32,15 @@ class MessageController(private val messageService: MessageService) {
 
     @GetMapping("/get/{ticketId}")
     fun getMessage(
-        @PathParam("ticketId") ticketId: String,
+        @PathVariable("ticketId") ticketId: String,
     ) : ResponseEntity<List<MessageDto>> {
         return ResponseEntity.ok(messageService.getMessage(ticketId))
     }
 
     @PostMapping("/update/{messageId}")
     fun updateMessage(
-        @PathParam("messageId") messageId: Long,
-        @Valid @RequestBody updateMessageDto: CreateMessageDto,
+        @PathVariable("messageId") messageId: Long,
+        @Valid @RequestBody updateMessageDto: UpdateMessageDto,
         @RequestHeader("Current-User") currentUser: String
     ) : ResponseEntity<DefaultResponseDto> {
         messageService.updateMessage(messageId, updateMessageDto, currentUser)
@@ -49,7 +50,7 @@ class MessageController(private val messageService: MessageService) {
 
     @DeleteMapping("/delete/{messageId}")
     fun deleteMessage(
-        @PathParam("messageId") messageId: Long,
+        @PathVariable("messageId") messageId: Long,
         @RequestHeader("Current-User") currentUser: String
     ) : ResponseEntity<DefaultResponseDto> {
         messageService.deleteMessage(messageId, currentUser)
