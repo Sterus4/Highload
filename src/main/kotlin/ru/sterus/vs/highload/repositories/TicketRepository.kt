@@ -1,8 +1,8 @@
 package ru.sterus.vs.highload.repositories
 
 import org.jooq.DSLContext
-import org.jooq.UpdateSetFirstStep
 import org.jooq.UpdateSetMoreStep
+import org.jooq.impl.DSL.field
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Repository
 import ru.sterus.vs.highload.exception.ProcessRequestException
@@ -18,7 +18,7 @@ import java.util.UUID
 class TicketRepository(private val dsl: DSLContext, private val groupRepository: GroupRepository) {
     fun create(ticket: Ticket, authorId: UUID, groupId: UUID) {
         val inserted = dsl.insertInto(Mapping.TICKET)
-            .set(TICKET.ID, UUID.randomUUID())
+            .set(field("id"), UUID.randomUUID())
             .set(TICKET.TITLE, ticket.title)
             .set(TICKET.DESCRIPTION, ticket.description)
             .set(TICKET.STATUS_ID, 4)
@@ -32,6 +32,7 @@ class TicketRepository(private val dsl: DSLContext, private val groupRepository:
 
     fun get(getTicketDto: GetTicketDto): List<Ticket> {
         val query = dsl.select(
+            TICKET.ID.`as`("id"),
             TICKET.TITLE.`as`("title"),
             TICKET.DESCRIPTION.`as`("description"),
             TICKET.CREATED_AT.`as`("ticket_created_at"),

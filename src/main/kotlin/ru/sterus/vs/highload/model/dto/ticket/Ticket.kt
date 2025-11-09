@@ -1,13 +1,11 @@
 package ru.sterus.vs.highload.model.dto.ticket
 
-import jakarta.persistence.Column
-import jakarta.persistence.Id
-import jakarta.validation.constraints.NotNull
-import ru.sterus.vs.highload.enums.TicketStatusEnum
 import java.time.OffsetDateTime
 import java.util.UUID
 
 open class Ticket {
+    open var id: UUID? = null
+
     open var title: String? = null
 
     open var description: String? = null

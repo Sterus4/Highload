@@ -47,11 +47,4 @@ open class Ticket {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "group_id", nullable = false)
     open var group: UserGroup? = null
-
-    companion object {
-        fun fromDto(createTicketDto: CreateTicketDto) = Ticket().apply {
-            title = createTicketDto.title
-            description = createTicketDto.description
-        }
-    }
 }

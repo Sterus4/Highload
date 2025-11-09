@@ -33,6 +33,12 @@ class Mapping {
         val STATUS: Field<String> = DSL.field("ticket_status.status", String::class.java)
     }
 
+    object PARTICIPANT : TableImpl<Nothing>(DSL.name("participant")) {
+        val USER_ID: Field<UUID> = DSL.field("user_id", UUID::class.java)
+        val GROUP_ID: Field<UUID> = DSL.field("group_id", UUID::class.java)
+        val ROLE_ID: Field<Int> = DSL.field("role_id", Int::class.java)
+    }
+
 
 
 }

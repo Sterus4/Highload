@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController
 import ru.sterus.vs.highload.model.dto.DefaultResponseDto
 import ru.sterus.vs.highload.model.dto.GroupAddUserDto
 import ru.sterus.vs.highload.model.dto.GroupDto
+import ru.sterus.vs.highload.model.dto.MoveUserToGroupDto
 import ru.sterus.vs.highload.service.GroupService
 import ru.sterus.vs.highload.util.ServiceUtil
 import java.util.UUID
@@ -24,13 +25,12 @@ class GroupController(private val groupService: GroupService, private val servic
         val currentUserId = UUID.fromString(currentUser)
 
         groupService.createGroup(group, currentUserId)
-        //TODO 201
-        return ResponseEntity.ok(DefaultResponseDto(message=
+        return ResponseEntity.status(201).body(DefaultResponseDto(message=
             "Group <${group.name}> created successfully!",
         ))
     }
 
-    @PostMapping("/api/group/addUser")
+    @PostMapping("/api/group/user/add")
     fun addUserGroup(
         @RequestHeader("CurrentUser") currentUser: String,
         @Valid @RequestBody request: GroupAddUserDto
@@ -42,6 +42,17 @@ class GroupController(private val groupService: GroupService, private val servic
         return ResponseEntity.ok(DefaultResponseDto(message = ("User added successfully!")))
     }
 
+    @PostMapping("/api/group/user/move")
+    fun moveUserGroup(
+        @RequestHeader("CurrentUser") currentUser: String,
+        @Valid @RequestBody request: MoveUserToGroupDto
+    ) : ResponseEntity<DefaultResponseDto> {
+        serviceUtil.validateUUID(currentUser)
+        val currentUserId = UUID.fromString(currentUser)
+
+        groupService.moveUser(request.userId, request.groupId, currentUserId, request.role)
+        return ResponseEntity.ok(DefaultResponseDto(message = ("User moved successfully!")))
+    }
 
 
 }

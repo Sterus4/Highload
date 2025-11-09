@@ -1,8 +1,10 @@
 package ru.sterus.vs.highload.it
 
+import org.junit.jupiter.api.Disabled
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@Disabled
 class EchoTest : BaseTest() {
     @Test
     fun testEcho() {

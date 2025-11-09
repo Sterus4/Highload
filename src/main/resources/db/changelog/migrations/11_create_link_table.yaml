@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: 11
+      author: sterus1
+      changes:
+        - createTable:
+            tableName: link
+            columns:
+              - column:
+                  name: first_ticket_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+                    foreignKeyName: link_first_ticket_id_fk
+                    references: ticket(id)
+              - column:
+                  name: second_ticket_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+                    foreignKeyName: link_second_ticket_id_fk
+                    references: ticket(id)

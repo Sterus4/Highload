@@ -15,7 +15,7 @@ class UserController(private val userService: UserService){
     @PostMapping("/api/user/register")
     fun register(@Valid @RequestBody request: UserDto): ResponseEntity<DefaultResponseDto>{
         userService.registerUser(request)
-        return ResponseEntity.ok(DefaultResponseDto(message =
+        return ResponseEntity.status(201).body(DefaultResponseDto(message =
             "User ${request.name} registered successfully"
         ))
     }

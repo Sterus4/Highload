@@ -8,4 +8,5 @@ interface GroupService {
     fun createGroup(group: GroupDto, currentUser: UUID)
 
     fun addUser(group: GroupDto, currentUser: UUID, userToAdd: String, role: Role)
+    fun moveUser(userId: UUID, groupId: UUID, currentUserId: UUID, role: Role)
 }

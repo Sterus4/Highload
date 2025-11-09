@@ -51,4 +51,13 @@ class GroupServiceImpl(val groupRepository: GroupRepository, val userRepository:
         }
         addUserToGroup(group, userToAdd, role)
     }
+
+    override fun moveUser(userId: UUID, groupId: UUID, currentUserId: UUID, role: Role) {
+        val currentUserGroups = groupRepository.getUserGroups(currentUserId)
+        val accesses = currentUserGroups.filter { it.groupName == "SUPER" }
+        if (accesses.isEmpty()) {
+            throw ProcessRequestException(HttpStatus.FORBIDDEN, "You are not allowed to manage group <$groupId>")
+        }
+        groupRepository.moveUser(userId, groupId, role)
+    }
 }

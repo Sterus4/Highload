@@ -1,10 +1,12 @@
 package ru.sterus.vs.highload.repositories
 
 import org.jooq.DSLContext
+import org.jooq.impl.DSL
 import org.jooq.impl.DSL.field
 import org.jooq.impl.DSL.table
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Repository
+import ru.sterus.vs.highload.repositories.Mapping.*
 import ru.sterus.vs.highload.exception.ProcessRequestException
 import ru.sterus.vs.highload.helper.intFromRole
 import ru.sterus.vs.highload.enums.Role
@@ -64,6 +66,28 @@ class GroupRepository(private val dsl: DSLContext, private val util: DBUtil) {
             .execute()
         if (inserted != 1){
             throw ProcessRequestException(HttpStatus.BAD_REQUEST, "User already have role $role in this group")
+        }
+    }
+
+    fun moveUser(userId: UUID, groupId: UUID, role: Role) {
+        dsl.transaction { configuration ->
+            val ctx = DSL.using(configuration)
+
+            ctx.deleteFrom(PARTICIPANT)
+                .where(PARTICIPANT.USER_ID.eq(userId))
+                .execute()
+
+            if (ctx.insertInto(PARTICIPANT)
+                .columns(PARTICIPANT.USER_ID, PARTICIPANT.GROUP_ID, PARTICIPANT.ROLE_ID)
+                .values(userId, groupId, role.intFromRole())
+                .execute() != 1){
+                throw ProcessRequestException(HttpStatus.BAD_REQUEST, "Failed to move user to group")
+            }
+
+            ctx.update(TICKET)
+                .set(TICKET.GROUP_ID, groupId)
+                .where(TICKET.AUTHOR_ID.eq(userId))
+                .execute()
         }
     }
 }

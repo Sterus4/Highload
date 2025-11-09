@@ -19,7 +19,7 @@ import java.util.UUID
 class TicketServiceImpl(val groupRepository: GroupRepository, val ticketRepository: TicketRepository) : TicketService {
     override fun createTicket(createTicketDto: CreateTicketDto, currentUser: UUID) {
         val userGroups = groupRepository.getUserGroups(currentUser).filter {
-            it.groupName == createTicketDto.groupName && it.role == Role.ADMIN.toString() || it.groupName == "SUPER"
+            it.groupName == createTicketDto.groupName || it.groupName == "SUPER"
         }
         if (userGroups.isEmpty()) {
             throw ProcessRequestException(HttpStatus.FORBIDDEN, "You are not allowed to manage group <${createTicketDto.groupName}>")
@@ -38,6 +38,7 @@ class TicketServiceImpl(val groupRepository: GroupRepository, val ticketReposito
             HttpStatus.BAD_REQUEST,
             "Ticket <${updateTicketDto.id}> does not exist"
         )
+        // TODO Обновлять только создатель
         val userGroups = groupRepository.getUserGroups(currentUserId)
         val accesses = userGroups.filter {
             it.groupName == currentTicket.group || it.groupName == "SUPER"
@@ -55,6 +56,7 @@ class TicketServiceImpl(val groupRepository: GroupRepository, val ticketReposito
             HttpStatus.BAD_REQUEST,
             "Ticket <${deleteTicketDto.id}> does not exist"
         )
+        // TODO удалять только создатель
         val accesses = userGroups.filter {
             it.groupName == currentTicket.group || it.groupName == "SUPER"
         }
